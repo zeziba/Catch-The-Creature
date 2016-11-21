@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -24,19 +25,19 @@ public abstract class Creature {
     private Instant created;
     private SoundFX kill = new SoundFX("Gun+1.wav");
 
-    public int getX() {
+    int getX() {
         return x;
     }
 
-    public void setX(int x) {
+    void setX(int x) {
         this.x = x;
     }
 
-    public int getY() {
+    int getY() {
         return y;
     }
 
-    public void setY(int y) {
+    void setY(int y) {
         this.y = y;
     }
 
@@ -46,32 +47,32 @@ public abstract class Creature {
         setY(y);
     }
 
-    public BufferedImage getImg() {
+    BufferedImage getImg() {
         return alive;
     }
 
-    public void setImg(String img) {
+    void setImg(String img) {
         try {
             alive = ImageIO.read(new File(img));
         }
         catch (IOException e) {
-
+            System.out.println(e);
         }
 
         setHeight(alive.getHeight());
         setWidth(alive.getWidth());
     }
 
-    public BufferedImage getDead() {
+    BufferedImage getDead() {
         return dead;
     }
 
-    public void setDead(String d) {
+    void setDead(String d) {
         try {
             dead = ImageIO.read(new File(d));
         }
         catch (IOException e) {
-
+            System.out.println(e);
         }
     }
 
@@ -79,7 +80,7 @@ public abstract class Creature {
         return height;
     }
 
-    public void setHeight(int height) {
+    private void setHeight(int height) {
         this.height = height;
     }
 
@@ -87,7 +88,7 @@ public abstract class Creature {
         return width;
     }
 
-    public void setWidth(int width) {
+    private void setWidth(int width) {
         this.width = width;
     }
 
@@ -105,7 +106,7 @@ public abstract class Creature {
         return bounds.contains(event.getPoint());
     }
 
-    public Instant getCreated() {
+    private Instant getCreated() {
         return created;
     }
 

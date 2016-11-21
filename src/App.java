@@ -14,7 +14,7 @@ public class App extends JFrame{
         init();
     }
 
-    public void init()
+    private void init()
     {
         PlayArea pa = new PlayArea(1000, "src/Images/background.jpeg", "Defense_Line.wav");
         add(pa);

@@ -80,7 +80,7 @@ public class PlayArea extends JPanel implements MouseListener{
         }
     }
 
-    public BufferedImage getBG() {
+    private BufferedImage getBG() {
         return background;
     }
 
@@ -96,7 +96,7 @@ public class PlayArea extends JPanel implements MouseListener{
                     c.setPoint(random.nextInt(10 + super.getWidth() - 20 - c.getWidth()),
                             random.nextInt(10 + super.getHeight() - 20 - c.getHeight()));
                     if (scoreM > 1)
-                        scoreM += scoreM * (TIMER_DELAY / 10000) - c.timeBetween(Instant.now());
+                        scoreM += scoreM * (TIMER_DELAY / 10000) - c.timeBetween(Instant.now()) * 1.25;
                     else
                         scoreM = 1;
                     c.setCreated(Instant.now());
@@ -115,11 +115,11 @@ public class PlayArea extends JPanel implements MouseListener{
         timer.start();
     }
 
-    public void setScore(double score) {
+    private void setScore(double score) {
         this.score = score;
     }
 
-    public double getScore() {
+    private double getScore() {
         return score;
     }
 
@@ -139,7 +139,7 @@ public class PlayArea extends JPanel implements MouseListener{
                 if (c.isState()) {
                     c.setState(false);
                     c.death();
-                    scoreM -= scoreM * (TIMER_DELAY / 10000) - c.timeBetween(Instant.now());
+                    scoreM -= scoreM * (TIMER_DELAY / 10000) - c.timeBetween(Instant.now()) / 2;
                     setScore(getScore() + (1 * scoreM));
                     scoreLabel.setText(String.format("Score: %.0f", score));
                     scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
