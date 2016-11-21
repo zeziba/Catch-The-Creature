@@ -1,7 +1,5 @@
 package Sounds;
 
-import javafx.scene.media.MediaPlayer;
-
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
