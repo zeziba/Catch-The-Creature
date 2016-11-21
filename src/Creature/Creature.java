@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
