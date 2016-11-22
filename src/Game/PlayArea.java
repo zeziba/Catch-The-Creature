@@ -5,6 +5,8 @@ import Creature.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -90,27 +92,28 @@ public class PlayArea extends JPanel implements MouseListener{
         {
             creatures[i] = new Hawk(random.nextInt(50), random.nextInt(50));
         }
-        Timer timer = new Timer(TIMER_DELAY, event -> {
-            for (Creature c: creatures)
-                if (c.isState()) {
-                    c.setPoint(random.nextInt(10 + super.getWidth() - 20 - c.getWidth()),
-                            random.nextInt(10 + super.getHeight() - 20 - c.getHeight()));
-                    if (scoreM > 1)
-                        scoreM += scoreM * (TIMER_DELAY / 10000) - c.timeBetween(Instant.now()) * 1.25;
-                    else
-                        scoreM = 1;
-                    c.setCreated(Instant.now());
-                }
-                else
-                {
-                    c.setState(true);
-                    c.setPoint(random.nextInt(10 + super.getWidth() - 20 - c.getWidth()),
-                            random.nextInt(10 + super.getHeight() - 20 - c.getHeight()));
-                    c.setCreated(Instant.now());
-                }
-            scoreLabel.setText(String.format("Score: %.0f", score));
-            scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
-            PlayArea.this.repaint();
+        Timer timer = new Timer(TIMER_DELAY, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                for (Creature c : creatures)
+                    if (c.isState()) {
+                        c.setPoint(random.nextInt(10 + PlayArea.super.getWidth() - 20 - c.getWidth()),
+                                random.nextInt(10 + PlayArea.super.getHeight() - 20 - c.getHeight()));
+                        if (scoreM > 1)
+                            scoreM += scoreM * (TIMER_DELAY / 10000) - c.timeBetween(Instant.now()) * 1.25;
+                        else
+                            scoreM = 1;
+                        c.setCreated(Instant.now());
+                    } else {
+                        c.setState(true);
+                        c.setPoint(random.nextInt(10 + PlayArea.super.getWidth() - 20 - c.getWidth()),
+                                random.nextInt(10 + PlayArea.super.getHeight() - 20 - c.getHeight()));
+                        c.setCreated(Instant.now());
+                    }
+                scoreLabel.setText(String.format("Score: %.0f", score));
+                scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
+                PlayArea.this.repaint();
+            }
         });
         timer.start();
     }
