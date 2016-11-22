@@ -1,7 +1,5 @@
 package Creature;
 
-import java.util.Random;
-
 /**
  * Created by cengen on 11/15/16.
  */
