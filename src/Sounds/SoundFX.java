@@ -14,7 +14,7 @@ public class SoundFX {
     public SoundFX(String fx) {
         String music = fx;
         try {
-            URL url = getClass().getResource("/Sounds/" + music);
+            URL url = getClass().getResource("/Sounds/SoundEffects/" + music);
             soundFx = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream(url);
             soundFx.open(ais);

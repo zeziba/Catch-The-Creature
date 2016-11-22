@@ -11,12 +11,15 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Random;
 
 /**
  * Created by cengen on 11/15/16.
  */
 
 public abstract class Creature {
+
+    Random random = new Random();
 
     private int x, y, height, width;
     private boolean isState;
@@ -128,7 +131,7 @@ public abstract class Creature {
         return duration;
     }
 
-    public void setDuration(double duration) {
+    void setDuration(double duration) {
         this.duration = duration;
     }
 
@@ -136,5 +139,10 @@ public abstract class Creature {
         kill.makeSound();
     }
 
-    public abstract void drawSelf(Graphics g, JPanel panel);
+    public void drawSelf(Graphics g, JPanel panel) {
+        if (this.isState())
+            g.drawImage(getImg(), getX(), getY(), panel);
+        else
+            g.drawImage(getDead(), getX(), getY(), panel);
+    }
 }

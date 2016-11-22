@@ -33,20 +33,20 @@ public class PlayArea extends JPanel implements MouseListener{
     private double scoreM = 1.0;
     private boolean created = false;
 
-    public PlayArea(int delay, String img, String music)
+    public PlayArea(int delay, String music)
     {
         TIMER_DELAY = delay;
-        init(img, music, 1);
+        init(music, 1);
     }
 
-    public PlayArea(int delay, String img, String music, int diff)
+    public PlayArea(int delay, String music, int diff)
     {
         TIMER_DELAY = delay;
-        init(img, music, diff);
+        init(music, diff);
     }
 
-    private void init(String img, String music, int diff) {
-        setBG(img);
+    private void init(String music, int diff) {
+        setBG();
         addMouseListener(this);
         creatures = new Creature[diff];
         initCreatures();
@@ -62,25 +62,31 @@ public class PlayArea extends JPanel implements MouseListener{
         this.add(scoreLabel);
         this.add(scoreMLabel);
         try {
-            URL url = getClass().getResource("/Sounds/" + music);
+            File file = new File("src/Sounds/Music");
+            String[] sounds = file.list();
+            int am = random.nextInt(sounds.length);
+            URL url = getClass().getResource("/Sounds/Music/" + sounds[am]);
             Clip clip = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream(url);
             clip.open(ais);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
-            System.out.println(ex);
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | NullPointerException ex) {
+            ex.printStackTrace();
         }
         scoreLabel.setText(String.format("Score: %.0f", score));
         scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
         scoreM = 1;
     }
 
-    private void setBG(String img)
+    private void setBG()
     {
+        File file = new File("src/Images/Backgrounds");
+        String[] fNames = file.list();
         try {
-            background = ImageIO.read(new File(img));
-        } catch (java.io.IOException ex) {
-
+            int f = random.nextInt(fNames.length);
+            background = ImageIO.read(new File(file.toString() + "/" + fNames[f]));
+        } catch (java.io.IOException | NullPointerException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -88,7 +94,7 @@ public class PlayArea extends JPanel implements MouseListener{
         return background;
     }
 
-    public void initCreatures() {
+    private void initCreatures() {
         if (!created) {
             for (int i = 0; i < creatures.length; i++)
                 creatures[i] = PickCreature.PickCreature(10 + random.nextInt(500), 10 + random.nextInt(500));
@@ -157,6 +163,8 @@ public class PlayArea extends JPanel implements MouseListener{
                     setScore(getScore() + (1 * scoreM));
                     scoreLabel.setText(String.format("Score: %.0f", score));
                     scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
+                    if ((int) score % 10 == 0 && score > 0)
+                        setBG();
                 }
             }
         super.repaint();
