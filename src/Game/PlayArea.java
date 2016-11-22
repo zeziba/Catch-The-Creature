@@ -33,19 +33,19 @@ public class PlayArea extends JPanel implements MouseListener{
     private double scoreM = 1.0;
     private boolean created = false;
 
-    public PlayArea(int delay, String music)
+    public PlayArea(int delay)
     {
         TIMER_DELAY = delay;
-        init(music, 1);
+        init(1);
     }
 
-    public PlayArea(int delay, String music, int diff)
+    public PlayArea(int delay, int diff)
     {
         TIMER_DELAY = delay;
-        init(music, diff);
+        init(diff);
     }
 
-    private void init(String music, int diff) {
+    private void init(int diff) {
         setBG();
         addMouseListener(this);
         creatures = new Creature[diff];

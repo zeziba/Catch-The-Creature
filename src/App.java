@@ -16,7 +16,7 @@ public class App extends JFrame{
 
     private void init()
     {
-        PlayArea pa = new PlayArea(10, "Defense_Line.wav");
+        PlayArea pa = new PlayArea(10);
         add(pa);
 
         setSize(800, 640);
