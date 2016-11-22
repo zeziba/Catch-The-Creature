@@ -23,6 +23,7 @@ public abstract class Creature {
     private BufferedImage alive, dead;
     private Instant created;
     private SoundFX kill = new SoundFX("Gun+1.wav");
+    private double duration;
 
     int getX() {
         return x;
@@ -116,10 +117,19 @@ public abstract class Creature {
     public double timeBetween(Instant instant)
     {
         try {
-            return Duration.between(getCreated(), instant).toMillis() / 10000.0;
+            return Duration.between(getCreated(), instant).toMillis();
         } catch (NullPointerException ex) {
+            System.out.println(ex);
             return 1.0;
         }
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
     }
 
     public void death() {

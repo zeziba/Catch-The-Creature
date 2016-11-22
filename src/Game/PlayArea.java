@@ -31,6 +31,7 @@ public class PlayArea extends JPanel implements MouseListener{
     private final int TIMER_DELAY;
     private double score = 0;
     private double scoreM = 1.0;
+    private boolean created = false;
 
     public PlayArea(int delay, String img, String music)
     {
@@ -48,6 +49,7 @@ public class PlayArea extends JPanel implements MouseListener{
         setBG(img);
         addMouseListener(this);
         creatures = new Creature[diff];
+        initCreatures();
         populateCreatures();
         scoreLabel.setFont(scoreLabel.getFont().deriveFont(Font.BOLD, 48));
         scoreLabel.setForeground(Color.WHITE);
@@ -86,30 +88,39 @@ public class PlayArea extends JPanel implements MouseListener{
         return background;
     }
 
+    public void initCreatures() {
+        if (!created) {
+            for (int i = 0; i < creatures.length; i++)
+                creatures[i] = PickCreature.PickCreature(10 + random.nextInt(500), 10 + random.nextInt(500));
+            for (Creature c: creatures) {
+                c.setCreated(Instant.now());
+            }
+            created = true;
+        }
+    }
+
     private void populateCreatures()
     {
-        for (int i = 0; i < creatures.length; i++)
-        {
-            creatures[i] = new Hawk(random.nextInt(50), random.nextInt(50));
-        }
         Timer timer = new Timer(TIMER_DELAY, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                for (Creature c : creatures)
-                    if (c.isState()) {
-                        c.setPoint(random.nextInt(10 + PlayArea.super.getWidth() - 20 - c.getWidth()),
-                                random.nextInt(10 + PlayArea.super.getHeight() - 20 - c.getHeight()));
-                        if (scoreM > 1)
-                            scoreM += scoreM * (TIMER_DELAY / 10000) - c.timeBetween(Instant.now()) * 1.25;
-                        else
-                            scoreM = 1;
-                        c.setCreated(Instant.now());
-                    } else {
-                        c.setState(true);
+                for (Creature c : creatures) {
+                    double timeX = c.timeBetween(Instant.now());
+                    if (timeX > c.getDuration()) {
+                        if (c.isState()) {
+                            if (scoreM > 1) {
+                                scoreM -= Math.pow(timeX / 10000, 1/1.2);
+                            }
+                            else
+                                scoreM = 1;
+                        } else {
+                            c.setState(true);
+                        }
                         c.setPoint(random.nextInt(10 + PlayArea.super.getWidth() - 20 - c.getWidth()),
                                 random.nextInt(10 + PlayArea.super.getHeight() - 20 - c.getHeight()));
                         c.setCreated(Instant.now());
                     }
+                }
                 scoreLabel.setText(String.format("Score: %.0f", score));
                 scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
                 PlayArea.this.repaint();
@@ -142,7 +153,7 @@ public class PlayArea extends JPanel implements MouseListener{
                 if (c.isState()) {
                     c.setState(false);
                     c.death();
-                    scoreM -= scoreM * (TIMER_DELAY / 10000) - c.timeBetween(Instant.now()) / 2;
+                    scoreM += c.timeBetween(Instant.now()) / 10000;
                     setScore(getScore() + (1 * scoreM));
                     scoreLabel.setText(String.format("Score: %.0f", score));
                     scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
