@@ -1,3 +1,8 @@
+import Game.PlayArea;
+
+import java.awt.*;
+import javax.swing.*;
+
 /**
  *  Created By; Charles Engen
  *  Instructor: Paul Novy
@@ -5,12 +10,6 @@
  *  Assignment: 6.21 Catch-the-Creature
  *
  **/
-
-
-import Game.PlayArea;
-
-import java.awt.*;
-import javax.swing.*;
 
 public class App extends JFrame{
 

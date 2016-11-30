@@ -71,7 +71,7 @@ public class PlayArea extends JPanel implements MouseListener{
                         @Override
                         public Object run () {
                             try {
-                                int am = random.nextInt(sounds.length);
+                                int am = random.nextInt(getSoundsLength());
                                 URL url = getClass().getResource("/Sounds/Music/" + sounds[am]);
                                 Clip clip = AudioSystem.getClip();
                                 AudioInputStream ais = AudioSystem.getAudioInputStream(url);
@@ -100,11 +100,11 @@ public class PlayArea extends JPanel implements MouseListener{
                     public Object run() {
                         try {
                             int fR;
-                            if (fNames.length > 0)
-                                fR = random.nextInt(fNames.length);
+                            if (getFNameLength() > 0)
+                                fR = random.nextInt(getFNameLength());
                             else
                                 fR = 0;
-                            setBackGround(ImageIO.read(new File(iFile.toString() + "/" + fNames[fR])));
+                            setBackGround(ImageIO.read(new File(getiFile().toString() + "/" + getfNames()[fR])));
                         } catch (java.io.IOException | java.lang.NullPointerException ex) {
                             ex.printStackTrace();
                         }
@@ -112,6 +112,14 @@ public class PlayArea extends JPanel implements MouseListener{
                     }
                 }
         );
+    }
+
+    public File getiFile() {
+        return iFile;
+    }
+
+    public String[] getfNames() {
+        return fNames;
     }
 
     public void setBackGround(BufferedImage img) {
@@ -124,7 +132,7 @@ public class PlayArea extends JPanel implements MouseListener{
 
     private void initCreatures() {
         if (!created) {
-            for (int i = 0; i < creatures.length; i++)
+            for (int i = 0; i < getCreatureLength(); i++)
                 creatures[i] = PickCreature.PickCreature(10 + random.nextInt(500), 10 + random.nextInt(500));
             for (Creature cre: creatures) {
                 cre.setCreated(System.currentTimeMillis());
@@ -212,6 +220,18 @@ public class PlayArea extends JPanel implements MouseListener{
                 }
             }
         super.repaint();
+    }
+
+    public int getFNameLength() {
+        return fNames.length;
+    }
+
+    public int getCreatureLength() {
+        return creatures.length;
+    }
+
+    public int getSoundsLength() {
+        return sounds.length;
     }
 
     @Override
