@@ -10,8 +10,6 @@
 import Game.PlayArea;
 
 import java.awt.*;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import javax.swing.*;
 
 public class App extends JFrame{
@@ -35,19 +33,12 @@ public class App extends JFrame{
 
     public static void main(String[] args)
     {
-        AccessController.doPrivileged(
-                new PrivilegedAction() {
-                    public Object run() {
-                        EventQueue.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                App ex = new App();
-                                ex.setVisible(true);
-                            }
-                        });
-                        return null;
-                    }
-                }
-        );
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                App ex = new App();
+                ex.setVisible(true);
+            }
+        });
     }
 }
