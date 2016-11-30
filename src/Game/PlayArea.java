@@ -32,6 +32,11 @@ public class PlayArea extends JPanel implements MouseListener{
     private double score = 0;
     private double scoreM = 1.0;
     private boolean created = false;
+    private File iFile = new File("src/Images/Backgrounds");
+    private String[] fNames = iFile.list();
+    private File sFile = new File("src/Sounds/Music");
+    private String[] sounds = sFile.list();
+    private int hits, misses;
 
     public PlayArea(int delay)
     {
@@ -62,8 +67,6 @@ public class PlayArea extends JPanel implements MouseListener{
         this.add(scoreLabel);
         this.add(scoreMLabel);
         try {
-            File file = new File("src/Sounds/Music");
-            String[] sounds = file.list();
             int am = random.nextInt(sounds.length);
             URL url = getClass().getResource("/Sounds/Music/" + sounds[am]);
             Clip clip = AudioSystem.getClip();
@@ -80,11 +83,13 @@ public class PlayArea extends JPanel implements MouseListener{
 
     private void setBG()
     {
-        File file = new File("src/Images/Backgrounds");
-        String[] fNames = file.list();
         try {
-            int f = random.nextInt(fNames.length);
-            background = ImageIO.read(new File(file.toString() + "/" + fNames[f]));
+            int fR;
+            if (fNames.length > 0)
+                fR = random.nextInt(fNames.length);
+            else
+                fR = 0;
+            background = ImageIO.read(new File(iFile.toString() + "/" + fNames[fR]));
         } catch (java.io.IOException | NullPointerException ex) {
             ex.printStackTrace();
         }
@@ -98,8 +103,8 @@ public class PlayArea extends JPanel implements MouseListener{
         if (!created) {
             for (int i = 0; i < creatures.length; i++)
                 creatures[i] = PickCreature.PickCreature(10 + random.nextInt(500), 10 + random.nextInt(500));
-            for (Creature c: creatures) {
-                c.setCreated(Instant.now());
+            for (Creature cre: creatures) {
+                cre.setCreated(Instant.now());
             }
             created = true;
         }
@@ -110,21 +115,27 @@ public class PlayArea extends JPanel implements MouseListener{
         Timer timer = new Timer(TIMER_DELAY, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                for (Creature c : creatures) {
-                    double timeX = c.timeBetween(Instant.now());
-                    if (timeX > c.getDuration()) {
-                        if (c.isState()) {
+                for (Creature cre : creatures) {
+                    double timeX = cre.timeBetween(Instant.now());
+                    if (timeX > cre.getDuration()) {
+                        if (cre.isState()) {
                             if (scoreM > 1) {
                                 scoreM -= Math.pow(timeX / 10000, 1/1.2);
                             }
                             else
                                 scoreM = 1;
                         } else {
-                            c.setState(true);
+                            cre.setState(true);
                         }
-                        c.setPoint(random.nextInt(10 + PlayArea.super.getWidth() - 20 - c.getWidth()),
-                                random.nextInt(10 + PlayArea.super.getHeight() - 20 - c.getHeight()));
-                        c.setCreated(Instant.now());
+                    try {
+                        cre.setPoint(random.nextInt(10 + PlayArea.super.getWidth() - 20 - cre.getWidth()),
+                                random.nextInt(10 + PlayArea.super.getHeight() - 20 - cre.getHeight()));
+                        cre.setCreated(Instant.now());
+                    }
+                    catch (IllegalArgumentException e) {
+                        cre.setPoint(10, 10);
+                        cre.setCreated(Instant.now());
+                    }
                     }
                 }
                 scoreLabel.setText(String.format("Score: %.0f", score));
@@ -154,17 +165,21 @@ public class PlayArea extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        for (Creature c: creatures)
-            if (c.contains(e)) {
-                if (c.isState()) {
-                    c.setState(false);
-                    c.death();
-                    scoreM += c.timeBetween(Instant.now()) / 10000;
+        for (Creature cre: creatures)
+            if (cre.contains(e)) {
+                if (cre.isState()) {
+                    cre.setState(false);
+                    cre.death();
+                    scoreM += cre.timeBetween(Instant.now()) / 10000;
                     setScore(getScore() + (1 * scoreM));
                     scoreLabel.setText(String.format("Score: %.0f", score));
                     scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
                     if ((int) score % 10 == 0 && score > 0)
                         setBG();
+                    hits++;
+                }
+                else {
+                    misses++;
                 }
             }
         super.repaint();
