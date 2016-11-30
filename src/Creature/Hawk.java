@@ -13,6 +13,6 @@ public class Hawk extends Creature {
         setState(true);
         setImg("src/Images/hawk.png");
         setDead("src/Images/hawk_dead.png");
-        setDuration(750 + random.nextInt(1000));
+        setDuration(500 + random.nextInt(1000));
     }
 }

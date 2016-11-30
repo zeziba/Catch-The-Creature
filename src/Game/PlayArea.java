@@ -72,7 +72,10 @@ public class PlayArea extends JPanel implements MouseListener{
             AudioInputStream ais = AudioSystem.getAudioInputStream(url);
             clip.open(ais);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | NullPointerException ex) {
+        } catch (javax.sound.sampled.LineUnavailableException |
+                java.io.IOException |
+                javax.sound.sampled.UnsupportedAudioFileException |
+                java.lang.NullPointerException ex) {
             ex.printStackTrace();
         }
         scoreLabel.setText(String.format("Score: %.0f", score));
@@ -89,7 +92,7 @@ public class PlayArea extends JPanel implements MouseListener{
             else
                 fR = 0;
             background = ImageIO.read(new File(iFile.toString() + "/" + fNames[fR]));
-        } catch (java.io.IOException | NullPointerException ex) {
+        } catch (java.io.IOException | java.lang.NullPointerException ex) {
             ex.printStackTrace();
         }
     }
@@ -119,7 +122,7 @@ public class PlayArea extends JPanel implements MouseListener{
                     if (timeX > cre.getDuration()) {
                         if (cre.isState()) {
                             if (scoreM > 1) {
-                                scoreM -= Math.pow(timeX / 10, 1/1.2);
+                                scoreM -= Math.pow(1.1, timeX / 10);
                             }
                             else
                                 scoreM = 1;

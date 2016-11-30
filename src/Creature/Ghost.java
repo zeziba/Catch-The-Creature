@@ -11,6 +11,6 @@ public class Ghost extends Creature {
         setState(true);
         setImg("src/Images/Ghost.png");
         setDead("src/Images/Ghost_dead.png");
-        setDuration(750 + random.nextInt(1000));
+        setDuration(500 + random.nextInt(1000));
     }
 }

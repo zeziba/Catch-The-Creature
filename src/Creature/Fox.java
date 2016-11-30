@@ -11,6 +11,6 @@ public class Fox extends Creature{
         setState(true);
         setImg("src/Images/Fox.png");
         setDead("src/Images/Fox_dead.png");
-        setDuration(750 + random.nextInt(1000));
+        setDuration(500 + random.nextInt(1000));
     }
 }
