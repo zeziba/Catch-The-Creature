@@ -20,9 +20,9 @@ public class SoundFX {
                     public Object run() {
                         try {
                             URL url = getClass().getResource("/Sounds/SoundEffects/" + fx);
-                            soundFx = AudioSystem.getClip();
-                            AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-                            soundFx.open(ais);
+                            setSoundFx(AudioSystem.getClip());
+                            AudioInputStream AIS = AudioSystem.getAudioInputStream(url);
+                            addAudio(AIS);
                         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
                             System.out.println(ex);
                         }
@@ -30,6 +30,22 @@ public class SoundFX {
                     }
                 }
         );
+    }
+
+    public Clip getSoundFx() {
+        return soundFx;
+    }
+
+    public void setSoundFx(Clip soundFx) {
+        this.soundFx = soundFx;
+    }
+
+    public void addAudio(AudioInputStream ais) {
+        try {
+            getSoundFx().open(ais);
+        } catch (java.io.IOException | javax.sound.sampled.LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void makeSound () {

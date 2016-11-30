@@ -104,7 +104,7 @@ public class PlayArea extends JPanel implements MouseListener{
                                 fR = random.nextInt(fNames.length);
                             else
                                 fR = 0;
-                            background = ImageIO.read(new File(iFile.toString() + "/" + fNames[fR]));
+                            setBackGround(ImageIO.read(new File(iFile.toString() + "/" + fNames[fR])));
                         } catch (java.io.IOException | java.lang.NullPointerException ex) {
                             ex.printStackTrace();
                         }
@@ -112,6 +112,10 @@ public class PlayArea extends JPanel implements MouseListener{
                     }
                 }
         );
+    }
+
+    public void setBackGround(BufferedImage img) {
+        background = img;
     }
 
     private BufferedImage getBG() {
@@ -138,9 +142,9 @@ public class PlayArea extends JPanel implements MouseListener{
                     double timeX = cre.timeBetween(System.currentTimeMillis());
                     if (timeX > cre.getDuration()) {
                         if (cre.isState()) {
-                            scoreM -= Math.pow(1.1, timeX / 5);
-                            if (scoreM < 1)
-                                scoreM = 1;
+                            setScoreM(getScoreM() - Math.pow(1.01, timeX / 5));
+                            if (getScoreM() < 1)
+                                setScoreM(1);
                         } else {
                             cre.setState(true);
                         }
@@ -180,6 +184,14 @@ public class PlayArea extends JPanel implements MouseListener{
         }
     }
 
+    public double getScoreM() {
+        return scoreM;
+    }
+
+    public void setScoreM(double scoreM) {
+        this.scoreM = scoreM;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         for (Creature cre: creatures)
@@ -187,8 +199,8 @@ public class PlayArea extends JPanel implements MouseListener{
                 if (cre.isState()) {
                     cre.setState(false);
                     cre.death();
-                    scoreM += Math.pow(cre.timeBetween(System.currentTimeMillis()) / 15, 1/1.2);
-                    setScore(getScore() + (1 * scoreM));
+                    setScoreM(getScoreM() + Math.pow(cre.timeBetween(System.currentTimeMillis()) / 15, 1/1.2));
+                    setScore(getScore() + (1 * getScoreM()));
                     scoreLabel.setText(String.format("Score: %.0f", score));
                     scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
                     if ((int) score % 10 == 0 && score > 0)
