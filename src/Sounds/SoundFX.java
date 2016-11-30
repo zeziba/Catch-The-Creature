@@ -51,11 +51,20 @@ public class SoundFX {
     }
 
     public void addAudio(AudioInputStream ais) {
-        try {
-            getSoundFx().open(ais);
-        } catch (java.io.IOException | javax.sound.sampled.LineUnavailableException ex) {
-            ex.printStackTrace();
-        }
+        AudioInputStream tmpAIS = ais;
+        AccessController.doPrivileged(
+                new PrivilegedAction() {
+                    @Override
+                    public Object run() {
+                        try {
+                            getSoundFx().open(tmpAIS);
+                        } catch (java.io.IOException | javax.sound.sampled.LineUnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+                        return null;
+                    }
+                }
+        );
     }
 
     public void makeSound () {
