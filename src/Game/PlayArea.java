@@ -33,9 +33,9 @@ public class PlayArea extends JPanel implements MouseListener{
     private double scoreM = 1.0;
     private boolean created = false;
     private File iFile = new File("src/Images/Backgrounds");
-    private String[] fNames = iFile.list();
+    private String[] fNames = new String[iFile.list().length];
     private File sFile = new File("src/Sounds/Music");
-    private String[] sounds = sFile.list();
+    private String[] sounds = new String[sFile.list().length];
     private int hits, misses;
 
     public PlayArea(int delay)
@@ -51,6 +51,8 @@ public class PlayArea extends JPanel implements MouseListener{
     }
 
     private void init(int diff) {
+        fNames = iFile.list();
+        sounds = sFile.list();
         setBG();
         addMouseListener(this);
         creatures = new Creature[diff];
@@ -223,21 +225,15 @@ public class PlayArea extends JPanel implements MouseListener{
     }
 
     public int getFNameLength() {
-        if (fNames[0] != null)
-            return fNames.length;
-        return 0;
+        return fNames.length;
     }
 
     public int getCreatureLength() {
-        if (creatures[0] != null)
-            return creatures.length;
-        return 0;
+        return creatures.length;
     }
 
     public int getSoundsLength() {
-        if (sounds[0] != null)
-            return sounds.length;
-        return 0;
+        return sounds.length;
     }
 
     @Override
