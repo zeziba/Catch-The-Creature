@@ -223,15 +223,21 @@ public class PlayArea extends JPanel implements MouseListener{
     }
 
     public int getFNameLength() {
-        return fNames.length;
+        if (fNames[0] != null)
+            return fNames.length;
+        return 0;
     }
 
     public int getCreatureLength() {
-        return creatures.length;
+        if (creatures[0] != null)
+            return creatures.length;
+        return 0;
     }
 
     public int getSoundsLength() {
-        return sounds.length;
+        if (sounds[0] != null)
+            return sounds.length;
+        return 0;
     }
 
     @Override
