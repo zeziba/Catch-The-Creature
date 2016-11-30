@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.Random;
 import javax.sound.sampled.*;
 
@@ -104,7 +103,7 @@ public class PlayArea extends JPanel implements MouseListener{
             for (int i = 0; i < creatures.length; i++)
                 creatures[i] = PickCreature.PickCreature(10 + random.nextInt(500), 10 + random.nextInt(500));
             for (Creature cre: creatures) {
-                cre.setCreated(Instant.now());
+                cre.setCreated(System.currentTimeMillis());
             }
             created = true;
         }
@@ -116,11 +115,11 @@ public class PlayArea extends JPanel implements MouseListener{
             @Override
             public void actionPerformed(ActionEvent event) {
                 for (Creature cre : creatures) {
-                    double timeX = cre.timeBetween(Instant.now());
+                    double timeX = cre.timeBetween(System.currentTimeMillis());
                     if (timeX > cre.getDuration()) {
                         if (cre.isState()) {
                             if (scoreM > 1) {
-                                scoreM -= Math.pow(timeX / 10000, 1/1.2);
+                                scoreM -= Math.pow(timeX / 10, 1/1.2);
                             }
                             else
                                 scoreM = 1;
@@ -130,11 +129,11 @@ public class PlayArea extends JPanel implements MouseListener{
                     try {
                         cre.setPoint(random.nextInt(10 + PlayArea.super.getWidth() - 20 - cre.getWidth()),
                                 random.nextInt(10 + PlayArea.super.getHeight() - 20 - cre.getHeight()));
-                        cre.setCreated(Instant.now());
+                        cre.setCreated(System.currentTimeMillis());
                     }
                     catch (IllegalArgumentException e) {
                         cre.setPoint(10, 10);
-                        cre.setCreated(Instant.now());
+                        cre.setCreated(System.currentTimeMillis());
                     }
                     }
                 }
@@ -170,7 +169,7 @@ public class PlayArea extends JPanel implements MouseListener{
                 if (cre.isState()) {
                     cre.setState(false);
                     cre.death();
-                    scoreM += cre.timeBetween(Instant.now()) / 10000;
+                    scoreM += Math.pow(cre.timeBetween(System.currentTimeMillis()) / 10, 1/1.2);
                     setScore(getScore() + (1 * scoreM));
                     scoreLabel.setText(String.format("Score: %.0f", score));
                     scoreMLabel.setText(String.format("Multi: %.2f", scoreM));

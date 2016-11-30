@@ -9,8 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Random;
 
 /**
@@ -24,7 +22,7 @@ public abstract class Creature {
     private int x, y, height, width;
     private boolean isState;
     private BufferedImage alive, dead;
-    private Instant created;
+    private long created;
     private SoundFX kill = new SoundFX("Gun+1.wav");
     private double duration;
 
@@ -109,18 +107,18 @@ public abstract class Creature {
         return bounds.contains(event.getPoint());
     }
 
-    private Instant getCreated() {
+    private long getCreated() {
         return created;
     }
 
-    public void setCreated(Instant created) {
+    public void setCreated(long created) {
         this.created = created;
     }
 
-    public double timeBetween(Instant instant)
+    public double timeBetween(long instant)
     {
         try {
-            return Duration.between(getCreated(), instant).toMillis();
+            return (instant - this.getCreated()) / 1000.0;
         } catch (NullPointerException ex) {
             System.out.println(ex);
             return 1.0;
@@ -132,7 +130,7 @@ public abstract class Creature {
     }
 
     void setDuration(double duration) {
-        this.duration = duration;
+        this.duration = duration / 1000;
     }
 
     public void death() {
