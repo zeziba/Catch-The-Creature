@@ -1,7 +1,7 @@
 import Game.PlayArea;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  *  Created By; Charles Engen

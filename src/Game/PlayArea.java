@@ -1,8 +1,12 @@
 package Game;
 
-import Creature.*;
+import Creature.Creature;
+import Creature.PickCreature;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,10 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Random;
-import javax.sound.sampled.*;
 
 /**
  * Created by cengen on 11/15/16.
@@ -68,27 +69,19 @@ public class PlayArea extends JPanel implements MouseListener{
         scoreMLabel.setHorizontalAlignment(JLabel.RIGHT);
         this.add(scoreLabel);
         this.add(scoreMLabel);
-            AccessController.doPrivileged(
-                    new PrivilegedAction() {
-                        @Override
-                        public Object run () {
-                            try {
-                                int am = random.nextInt(getSoundsLength());
-                                URL url = getClass().getResource("/Sounds/Music/" + sounds[am]);
-                                Clip clip = AudioSystem.getClip();
-                                AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-                                clip.open(ais);
-                                clip.loop(Clip.LOOP_CONTINUOUSLY);
-                            } catch (javax.sound.sampled.LineUnavailableException |
-                                java.io.IOException |
-                                javax.sound.sampled.UnsupportedAudioFileException |
-                                java.lang.NullPointerException ex) {
-                                ex.printStackTrace();
-                            }
-                            return null;
-                        }
-                    }
-            );
+        try {
+            int am = random.nextInt(getSoundsLength());
+            URL url = getClass().getResource("/Sounds/Music/" + sounds[am]);
+            Clip clip = AudioSystem.getClip();
+            AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+            clip.open(ais);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (javax.sound.sampled.LineUnavailableException |
+                java.io.IOException |
+                javax.sound.sampled.UnsupportedAudioFileException |
+                java.lang.NullPointerException ex) {
+            ex.printStackTrace();
+        }
         scoreLabel.setText(String.format("Score: %.0f", score));
         scoreMLabel.setText(String.format("Multi: %.2f", scoreM));
         scoreM = 1;
@@ -96,24 +89,16 @@ public class PlayArea extends JPanel implements MouseListener{
 
     private void setBG()
     {
-        AccessController.doPrivileged(
-                new PrivilegedAction() {
-                    @Override
-                    public Object run() {
-                        try {
-                            int fR;
-                            if (getFNameLength() > 0)
-                                fR = random.nextInt(getFNameLength());
-                            else
-                                fR = 0;
-                            setBackGround(ImageIO.read(new File(getiFile().toString() + "/" + getfNames()[fR])));
-                        } catch (java.io.IOException | java.lang.NullPointerException ex) {
-                            ex.printStackTrace();
-                        }
-                        return null;
-                    }
-                }
-        );
+        try {
+            int fR;
+            if (getFNameLength() > 0)
+                fR = random.nextInt(getFNameLength());
+            else
+                fR = 0;
+            setBackGround(ImageIO.read(new File(getiFile().toString() + "/" + getfNames()[fR])));
+        } catch (java.io.IOException | java.lang.NullPointerException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public File getiFile() {
@@ -194,11 +179,11 @@ public class PlayArea extends JPanel implements MouseListener{
         }
     }
 
-    public double getScoreM() {
+    private double getScoreM() {
         return scoreM;
     }
 
-    public void setScoreM(double scoreM) {
+    private void setScoreM(double scoreM) {
         this.scoreM = scoreM;
     }
 
