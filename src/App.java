@@ -1,10 +1,10 @@
-/*
+/**
  *  Created By; Charles Engen
  *  Instructor: Paul Novy
  *
  *  Assignment: 6.21 Catch-the-Creature
  *
- */
+ **/
 
 
 import Game.PlayArea;
@@ -25,6 +25,7 @@ public class App extends JFrame{
         add(pa);
 
         setSize(800, 640);
+        setMinimumSize(new Dimension(440, 220));
         setTitle("Catch-The-Creature");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
