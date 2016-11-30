@@ -12,14 +12,16 @@ import java.security.PrivilegedAction;
 public class SoundFX {
 
     private Clip soundFx;
+    private String soundLocation;
 
     public SoundFX(String fx) {
+        setSoundLocation(fx);
         AccessController.doPrivileged(
                 new PrivilegedAction() {
                     @Override
                     public Object run() {
                         try {
-                            URL url = getClass().getResource("/Sounds/SoundEffects/" + fx);
+                            URL url = getClass().getResource("/Sounds/SoundEffects/" + getSoundLocation());
                             setSoundFx(AudioSystem.getClip());
                             AudioInputStream AIS = AudioSystem.getAudioInputStream(url);
                             addAudio(AIS);
@@ -30,6 +32,14 @@ public class SoundFX {
                     }
                 }
         );
+    }
+
+    public String getSoundLocation() {
+        return soundLocation;
+    }
+
+    public void setSoundLocation(String soundLocation) {
+        this.soundLocation = soundLocation;
     }
 
     public Clip getSoundFx() {
